@@ -19,4 +19,10 @@ public class ReasonType {
 
     public ReasonType() {
     }
+
+    public ReasonType(long id, String name, Appointment appointment) {
+        this.id = id;
+        this.name = name;
+        this.appointment = appointment;
+    }
 }
