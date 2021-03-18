@@ -32,9 +32,10 @@ public class Appointment {
     private String attention;
     @Column(name = "employee_id")
     private long employeeId;
-
-    //TODO:
-    //      employeeId, PatientId, LocationId
+    @Column(name = "patient_id")
+    private long patientId;
+    @Column(name = "location_id")
+    private long locationId;
 
     public Appointment() {
     }
