@@ -1,5 +1,6 @@
 package com.pharma.appointments.models;
 
+import com.pharma.appointments.models.dto.AppointmentDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -32,6 +33,31 @@ public class Appointment {
     @Column(name = "employee_id")
     private long employeeId;
 
+    //TODO:
+    //      employeeId, PatientId, LocationId
+
     public Appointment() {
+    }
+
+    public Appointment(long id, Date startTime, Date endTime, String description, AppointmentType appointmentType, ReasonType reasonType, String reason, String attention) {
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+        this.appointmentType = appointmentType;
+        this.reasonType = reasonType;
+        this.reason = reason;
+        this.attention = attention;
+    }
+
+    public Appointment(AppointmentDto dto) {
+        this.id = dto.getId();
+        this.startTime = dto.getStartTime();
+        this.endTime = dto.getEndTime();
+        this.description = dto.getDescription();
+        this.reason = dto.getReason();
+        this.attention = dto.getAttention();
+        this.appointmentType = new AppointmentType(dto.getAppointmentTypeId(), dto.getAppointmentTypeName(), this);
+        this.reasonType = new ReasonType(dto.getReasonTypeId(), dto.getReasonTypeName(), this);
     }
 }

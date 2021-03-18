@@ -20,4 +20,10 @@ public class AppointmentType {
 
     public AppointmentType() {
     }
+
+    public AppointmentType(long id, String name, Appointment appointment) {
+        this.id = id;
+        this.name = name;
+        this.appointment = appointment;
+    }
 }
