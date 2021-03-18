@@ -29,6 +29,8 @@ public class Appointment {
     private String reason;
     @Column(name = "attention")
     private String attention;
+    @Column(name = "employee_id")
+    private long employeeId;
 
     public Appointment() {
     }
