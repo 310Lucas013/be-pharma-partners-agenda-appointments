@@ -1,5 +1,10 @@
 package com.pharma.appointments.controllers;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.pharma.appointments.models.HibernateProxyTypeAdapter;
 import com.pharma.appointments.models.dto.AppointmentDto;
 import com.pharma.appointments.models.Appointment;
 import com.pharma.appointments.services.AppointmentService;
@@ -10,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,8 +42,39 @@ public class AppointmentController {
     }
 
     @GetMapping("/employee-id/{id}")
-    public ResponseEntity<List<Appointment>> getAll(@PathVariable("id") long id) {
-        return new ResponseEntity<>(appointmentService.getAllAppointmentsByEmployeeId(id), HttpStatus.OK);
+    public ResponseEntity<String> getAll(@PathVariable("id") long id) {
+        System.out.println(id);
+        List<Appointment> appointments = appointmentService.getAllAppointmentsByEmployeeId(id);
+        Gson gson = initiateGson();
+        String result = gson.toJson(appointments);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    private Gson initiateGson() {
+        GsonBuilder b = new GsonBuilder();
+        b.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY)
+                .excludeFieldsWithModifiers(Modifier.TRANSIENT)
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        boolean exclude = false;
+                        try {
+                            exclude = EXCLUDE.contains(f.getName());
+                        } catch (Exception ignore) {
+                        }
+                        return exclude;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                });
+        return b.create();
+    }
+
+    private static final List<String> EXCLUDE = new ArrayList<>() {{
+        add("appointment");
+    }};
 
 }
