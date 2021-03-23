@@ -1,5 +1,6 @@
 package com.pharma.appointments.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class ReasonType {
     private long id;
     @Column(name = "name")
     private String name;
+    @JsonIgnore
     @OneToOne(mappedBy = "reasonType")
     private Appointment appointment;
 

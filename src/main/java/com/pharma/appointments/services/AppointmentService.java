@@ -23,4 +23,8 @@ public class AppointmentService {
     public List<Appointment> getAllAppointmentsByEmployeeId(long id) {
         return appointmentRepository.getAllByEmployeeId(id);
     }
+
+    public List<Appointment> getAllAppointments() {
+        return appointmentRepository.findAll();
+    }
 }

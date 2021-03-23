@@ -1,5 +1,6 @@
 package com.pharma.appointments.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pharma.appointments.models.dto.AppointmentDto;
 import lombok.Data;
 
@@ -22,9 +23,11 @@ public class Appointment {
     private String description;
     @OneToOne
     @JoinColumn(name = "appointment_type_id", referencedColumnName = "id")
+    @JsonIgnore
     private AppointmentType appointmentType;
     @OneToOne
     @JoinColumn(name = "reason_type_id", referencedColumnName = "id")
+    @JsonIgnore
     private ReasonType reasonType;
     @Column(name = "reason")
     private String reason;
