@@ -5,6 +5,8 @@ import com.pharma.appointments.models.Appointment;
 import com.pharma.appointments.services.AppointmentService;
 import com.pharma.appointments.services.AppointmentTypeService;
 import com.pharma.appointments.services.ReasonTypeService;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(value = "/appointments")
-@CrossOrigin(origins = {"http://localhost:4201", "http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4201", "http://localhost:8080", "http://localhost:8081",
+        "http://localhost:8082", "http://localhost:8083", "http://localhost:8084", "http://localhost:8085",
+        "http://localhost:5672", "http://localhost:15672"})
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -23,10 +27,18 @@ public class AppointmentController {
 
     private final ReasonTypeService reasonTypeService;
 
-    public AppointmentController(AppointmentService appointmentService, AppointmentTypeService appointmentTypeService, ReasonTypeService reasonTypeService) {
+    private final AmqpTemplate rabbitTemplate;
+
+    @Value("${rabbitmq.exchange}")
+    private String exchange;
+    @Value("${rabbitmq.routingKey}")
+    private String routingkey;
+
+    public AppointmentController(AppointmentService appointmentService, AppointmentTypeService appointmentTypeService, ReasonTypeService reasonTypeService, AmqpTemplate rabbitTemplate) {
         this.appointmentService = appointmentService;
         this.appointmentTypeService = appointmentTypeService;
         this.reasonTypeService = reasonTypeService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -35,8 +47,15 @@ public class AppointmentController {
     }
 
     @GetMapping("/employee-id/{id}")
-    public ResponseEntity<List<Appointment>> getAll(@PathVariable("id") long id) {
-        return new ResponseEntity<>(appointmentService.getAllAppointmentsByEmployeeId(id), HttpStatus.OK);
+    public ResponseEntity<?> getAll(@PathVariable("id") long id) {
+        List<Appointment> ls = appointmentService.getAllAppointmentsByEmployeeId(id);
+        return ResponseEntity.ok(ls);
     }
 
+    @GetMapping("/getall")
+    public ResponseEntity<?> getAllAppointments() {
+        List<Appointment> ls = appointmentService.getAllAppointments();
+        rabbitTemplate.convertAndSend(exchange, routingkey, ls);
+        return ResponseEntity.ok(ls);
+    }
 }
