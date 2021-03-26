@@ -1,17 +1,22 @@
 package com.pharma.appointments.controllers;
 
+import com.google.gson.Gson;
+import com.pharma.appointments.events.CreateAppointmentEvent;
 import com.pharma.appointments.models.dto.AppointmentDto;
 import com.pharma.appointments.models.Appointment;
 import com.pharma.appointments.services.AppointmentService;
 import com.pharma.appointments.services.AppointmentTypeService;
 import com.pharma.appointments.services.ReasonTypeService;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -29,16 +34,19 @@ public class AppointmentController {
 
     private final AmqpTemplate rabbitTemplate;
 
+    private final Gson gson;
+
     @Value("${rabbitmq.exchange}")
     private String exchange;
     @Value("${rabbitmq.routingKey}")
     private String routingkey;
 
-    public AppointmentController(AppointmentService appointmentService, AppointmentTypeService appointmentTypeService, ReasonTypeService reasonTypeService, AmqpTemplate rabbitTemplate) {
+    public AppointmentController(AppointmentService appointmentService, AppointmentTypeService appointmentTypeService, ReasonTypeService reasonTypeService, AmqpTemplate rabbitTemplate, Gson gson) {
         this.appointmentService = appointmentService;
         this.appointmentTypeService = appointmentTypeService;
         this.reasonTypeService = reasonTypeService;
         this.rabbitTemplate = rabbitTemplate;
+        this.gson = gson;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -52,10 +60,21 @@ public class AppointmentController {
         return ResponseEntity.ok(ls);
     }
 
-    @GetMapping("/getall")
+    @RequestMapping(value = "/getall", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<?> getAllAppointments() {
         List<Appointment> ls = appointmentService.getAllAppointments();
-        rabbitTemplate.convertAndSend(exchange, routingkey, ls);
+
+        CreateAppointmentEvent event = new CreateAppointmentEvent();
+        event.setId(ls.get(0).getId());
+        event.setEmployeeId(ls.get(0).getEmployeeId());
+        event.setPatientId(ls.get(0).getPatientId());
+        event.setLocationid(ls.get(0).getLocationId());
+        String json = gson.toJson(event);
+        Message message = MessageBuilder
+                .withBody(json.getBytes())
+                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                .build();
+        rabbitTemplate.convertAndSend(exchange, "create-appointment", message);
         return ResponseEntity.ok(ls);
     }
 }
