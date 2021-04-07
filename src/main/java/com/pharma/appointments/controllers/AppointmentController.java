@@ -16,9 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/appointments")
-@CrossOrigin(origins = {"http://localhost:4201", "http://localhost:8080", "http://localhost:8081",
-        "http://localhost:8082", "http://localhost:8083", "http://localhost:8084", "http://localhost:8085",
-        "http://localhost:5672", "http://localhost:15672"})
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
