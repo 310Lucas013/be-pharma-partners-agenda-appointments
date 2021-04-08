@@ -5,7 +5,9 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pharma.appointments.models.HibernateProxyTypeAdapter;
+import com.google.gson.GsonBuilder;
 import com.pharma.appointments.events.CreateAppointmentEvent;
+import com.pharma.appointments.models.HibernateProxyTypeAdapter;
 import com.pharma.appointments.models.dto.AppointmentDto;
 import com.pharma.appointments.models.Appointment;
 import com.pharma.appointments.services.AppointmentService;
@@ -95,6 +97,11 @@ public class AppointmentController {
                 .build();
         rabbitTemplate.convertAndSend(exchange, "create-appointment", gson.toJson(event));
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
+         return ResponseEntity.ok(appointmentService.addAppointment(newAppointment));
     }
 
     private Gson initiateGson() {
