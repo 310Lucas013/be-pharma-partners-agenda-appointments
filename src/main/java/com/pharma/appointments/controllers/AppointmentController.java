@@ -101,7 +101,14 @@ public class AppointmentController {
 
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
-         return ResponseEntity.ok(appointmentService.addAppointment(newAppointment));
+        Appointment appointment;
+        try {
+            appointment = new Appointment(newAppointment);
+            return ResponseEntity.ok(appointmentService.addAppointment(appointment));
+        } catch (NullPointerException exception) {
+            System.out.println(exception);
+        }
+        return new ResponseEntity<>("Failed to update appointment", HttpStatus.BAD_REQUEST);
     }
 
     private Gson initiateGson() {
