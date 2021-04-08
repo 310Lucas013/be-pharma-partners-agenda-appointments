@@ -34,6 +34,11 @@ public class Appointment implements Serializable {
     private String reason;
     @Column(name = "attention")
     private String attention;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "appointment_status")
+    private AppointmentStatus appointmentStatus;
+    @Column(name = "priority")
+    private boolean priority;
     @Column(name = "employee_id")
     private long employeeId;
     @Column(name = "patient_id")

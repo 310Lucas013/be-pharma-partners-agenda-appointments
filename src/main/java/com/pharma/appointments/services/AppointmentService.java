@@ -21,7 +21,11 @@ public class AppointmentService {
     }
 
     public List<Appointment> getAllAppointmentsByEmployeeId(long id) {
-        return appointmentRepository.getAllByEmployeeId(id);
+        System.out.println(id);
+        List<Appointment> appointments = appointmentRepository.findAllByEmployeeId(id);
+        System.out.println("something");
+        // System.out.println(appointments);
+        return appointments;
     }
 
     public List<Appointment> getAllAppointments() {
