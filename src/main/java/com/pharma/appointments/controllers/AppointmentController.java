@@ -52,11 +52,6 @@ public class AppointmentController {
         this.gson = gson;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@RequestBody AppointmentDto appointmentDto) {
-        return ResponseEntity.ok(appointmentService.addAppointment(appointmentDto));
-    }
-
     @GetMapping("/employee-id/{id}")
     public ResponseEntity<String> getAll(@PathVariable("id") long id) {
         System.out.println(id);
@@ -69,19 +64,37 @@ public class AppointmentController {
     @RequestMapping(value = "/getall", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
     public ResponseEntity<?> getAllAppointments() {
         List<Appointment> ls = appointmentService.getAllAppointments();
+        return ResponseEntity.ok(ls);
+    }
 
+    @RequestMapping(value = "/create/{appointmentDto}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<?> createAppointments(@PathVariable AppointmentDto appointmentDto) {
+        Appointment appointment;
+        try {
+            appointment = new Appointment(appointmentDto);
+        } catch (NullPointerException exception) {
+            System.out.println(exception);
+            return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);
+        }
+        appointment = appointmentService.addAppointment(appointment);
+        if (appointment == null) {
+            return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);
+        }
         CreateAppointmentEvent event = new CreateAppointmentEvent();
-        event.setId(ls.get(0).getId());
-        event.setEmployeeId(ls.get(0).getEmployeeId());
-        event.setPatientId(ls.get(0).getPatientId());
-        event.setLocationid(ls.get(0).getLocationId());
+        event.setId(appointment.getId());
+        event.setEmployeeId(appointment.getEmployeeId());
+        event.setPatientName(appointmentDto.getPatientName());
+        event.setPatientDateOfBirth(appointmentDto.getPatientDateOfBirth());
+        event.setPatientStringNameNumber(appointmentDto.getPatientStreetNameNumber());
+        event.setPatientPostalCode(appointmentDto.getPatientPostalCode());
+        event.setLocation(appointmentDto.getLocation());
         String json = gson.toJson(event);
         Message message = MessageBuilder
                 .withBody(json.getBytes())
                 .setContentType(MessageProperties.CONTENT_TYPE_JSON)
                 .build();
-        rabbitTemplate.convertAndSend(exchange, "create-appointment", message);
-        return ResponseEntity.ok(ls);
+        rabbitTemplate.convertAndSend(exchange, "create-appointment", gson.toJson(event));
+        return new ResponseEntity<>(appointment, HttpStatus.CREATED);
     }
 
     private Gson initiateGson() {
