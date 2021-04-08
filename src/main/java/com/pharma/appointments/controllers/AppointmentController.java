@@ -57,6 +57,30 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.addAppointment(appointmentDto));
     }
 
+    @RequestMapping(method = RequestMethod.PUT)
+    public void update(@RequestBody AppointmentDto appointmentDto) {
+        try {
+          appointmentService.addAppointment(appointmentDto);
+        }
+        catch (Exception ignore){
+        }
+
+        CreateAppointmentEvent event = new CreateAppointmentEvent();
+        event.setId(appointmentDto.getId());
+        event.setEmployeeId(appointmentDto.getEmployeeId());
+        event.setPatientId(appointmentDto.getPatientId());
+        event.setLocationid(appointmentDto.getLoationId());
+
+        String json = gson.toJson(event);
+        Message message = MessageBuilder
+                .withBody(json.getBytes())
+                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                .build();
+
+        rabbitTemplate.convertAndSend(exchange, "update-appointment", message);
+    }
+
+
     @GetMapping("/employee-id/{id}")
     public ResponseEntity<String> getAll(@PathVariable("id") long id) {
         System.out.println(id);
