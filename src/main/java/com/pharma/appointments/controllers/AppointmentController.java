@@ -74,4 +74,9 @@ public class AppointmentController {
         rabbitTemplate.convertAndSend(exchange, "create-appointment", message);
         return ResponseEntity.ok(ls);
     }
+
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
+         return ResponseEntity.ok(appointmentService.addAppointment(newAppointment));
+    }
 }
