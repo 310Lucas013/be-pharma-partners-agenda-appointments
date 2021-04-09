@@ -82,19 +82,7 @@ public class AppointmentController {
         if (appointment == null) {
             return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);
         }
-        CreateAppointmentEvent event = new CreateAppointmentEvent();
-        event.setId(appointment.getId());
-        event.setEmployeeId(appointment.getEmployeeId());
-        event.setPatientName(appointmentDto.getPatientName());
-        event.setPatientDateOfBirth(appointmentDto.getPatientDateOfBirth());
-        event.setPatientStringNameNumber(appointmentDto.getPatientStreetNameNumber());
-        event.setPatientPostalCode(appointmentDto.getPatientPostalCode());
-        event.setLocation(appointmentDto.getLocation());
-        String json = gson.toJson(event);
-        Message message = MessageBuilder
-                .withBody(json.getBytes())
-                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-                .build();
+        CreateAppointmentEvent event = new CreateAppointmentEvent(appointmentDto);
         rabbitTemplate.convertAndSend(exchange, "create-appointment", gson.toJson(event));
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);
     }

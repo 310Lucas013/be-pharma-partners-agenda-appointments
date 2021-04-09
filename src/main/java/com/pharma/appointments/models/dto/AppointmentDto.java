@@ -10,7 +10,11 @@ public class AppointmentDto {
     private Date startTime;
     private Date endTime;
     private String description;
-    private String location;
+    private String street;
+    private String city;
+    private String houseNumber;
+    private String country;
+    private String postalCode;
     private String reason;
     private String attention;
     private String color;
@@ -35,12 +39,16 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, Date startTime, Date endTime, String description, String location, String reason, String attention, String color, Long appointmentTypeId, String appointmentTypeName, Long reasonTypeId, String reasonTypeName, String patientName, String patientStreetNameNumber, String patientDateOfBirth, String patientPostalCode, Long employeeId, Long patientId, Long locationId) {
+    public AppointmentDto(Long id, Date startTime, Date endTime, String description, String street, String city, String houseNumber, String country, String postalCode, String reason, String attention, String color, Long appointmentTypeId, String appointmentTypeName, Long reasonTypeId, String reasonTypeName, String patientName, String patientStreetNameNumber, String patientDateOfBirth, String patientPostalCode, Long employeeId, Long patientId, Long locationId) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.description = description;
-        this.location = location;
+        this.street = street;
+        this.city = city;
+        this.houseNumber = houseNumber;
+        this.country = country;
+        this.postalCode = postalCode;
         this.reason = reason;
         this.attention = attention;
         this.color = color;
