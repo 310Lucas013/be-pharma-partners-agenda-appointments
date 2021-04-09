@@ -61,7 +61,7 @@ public class Appointment implements Serializable {
     }
 
     public Appointment(AppointmentDto dto) {
-        this.id = dto.getId();
+        if(dto.getId() != null) this.id = dto.getId();
         this.startTime = dto.getStartTime();
         this.endTime = dto.getEndTime();
         this.description = dto.getDescription();

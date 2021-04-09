@@ -4,6 +4,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pharma.appointments.models.AppointmentStatus;
 import com.pharma.appointments.models.HibernateProxyTypeAdapter;
 import com.google.gson.GsonBuilder;
 import com.pharma.appointments.events.CreateAppointmentEvent;
@@ -74,6 +75,7 @@ public class AppointmentController {
         Appointment appointment;
         try {
             appointment = new Appointment(appointmentDto);
+            appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
         } catch (NullPointerException exception) {
             System.out.println(exception);
             return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);
