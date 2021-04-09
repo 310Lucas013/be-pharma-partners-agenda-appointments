@@ -67,8 +67,8 @@ public class AppointmentController {
         return ResponseEntity.ok(ls);
     }
 
-    @RequestMapping(value = "/create/{appointmentDto}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<?> createAppointments(@PathVariable AppointmentDto appointmentDto) {
+    @RequestMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<?> createAppointments(@RequestBody AppointmentDto appointmentDto) {
         Appointment appointment;
         try {
             appointment = new Appointment(appointmentDto);

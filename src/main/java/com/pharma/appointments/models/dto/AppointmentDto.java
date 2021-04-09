@@ -17,7 +17,7 @@ public class AppointmentDto {
 
     //appointmentType
     private Long appointmentTypeId;
-    private String appointmentTypeName;
+        private String appointmentTypeName;
     //reasonType
     private Long reasonTypeId;
     private String reasonTypeName;
@@ -30,12 +30,12 @@ public class AppointmentDto {
 
     private Long employeeId;
     private Long patientId;
-    private Long loationId;
+    private Long locationId;
 
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Long id, Date startTime, Date endTime, String description, String location, String reason, String attention, String color, Long appointmentTypeId, String appointmentTypeName, Long reasonTypeId, String reasonTypeName, String patientName, String patientStreetNameNumber, String patientDateOfBirth, String patientPostalCode, Long employeeId, Long patientId, Long loationId) {
+    public AppointmentDto(Long id, Date startTime, Date endTime, String description, String location, String reason, String attention, String color, Long appointmentTypeId, String appointmentTypeName, Long reasonTypeId, String reasonTypeName, String patientName, String patientStreetNameNumber, String patientDateOfBirth, String patientPostalCode, Long employeeId, Long patientId, Long locationId) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -54,6 +54,6 @@ public class AppointmentDto {
         this.patientPostalCode = patientPostalCode;
         this.employeeId = employeeId;
         this.patientId = patientId;
-        this.loationId = loationId;
+        this.locationId = locationId;
     }
 }

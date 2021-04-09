@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "ReasonType")
@@ -17,15 +18,15 @@ public class ReasonType implements Serializable {
     @Column(name = "name")
     private String name;
     @JsonIgnore
-    @OneToOne(mappedBy = "reasonType")
-    private Appointment appointment;
+    @OneToMany(mappedBy = "reasonType")
+    private List<Appointment> appointments;
 
     public ReasonType() {
     }
 
-    public ReasonType(long id, String name, Appointment appointment) {
+    public ReasonType(long id, String name, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
-        this.appointment = appointment;
+        this.appointments = appointments;
     }
 }

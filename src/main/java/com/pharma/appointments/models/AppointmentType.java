@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "AppointmentType")
@@ -17,15 +18,15 @@ public class AppointmentType implements Serializable {
     @Column(name = "name")
     private String name;
     @JsonIgnore
-    @OneToOne(mappedBy = "appointmentType")
-    private Appointment appointment;
+    @OneToMany(mappedBy = "appointmentType")
+    private List<Appointment> appointments;
 
     public AppointmentType() {
     }
 
-    public AppointmentType(long id, String name, Appointment appointment) {
+    public AppointmentType(long id, String name, List<Appointment> appointments) {
         this.id = id;
         this.name = name;
-        this.appointment = appointment;
+        this.appointments = appointments;
     }
 }
