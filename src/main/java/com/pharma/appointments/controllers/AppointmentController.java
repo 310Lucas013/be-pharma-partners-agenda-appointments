@@ -80,11 +80,15 @@ public class AppointmentController {
 
         UpdateAppointmentEvent event = new UpdateAppointmentEvent();
         event.setId(appointmentDto.getId());
-        event.setZipCode(appointmentDto.getLocation());
+        event.setCountry(appointmentDto.getCountry());
+        event.setZipCode(appointmentDto.getPostalCode());
+        event.setCity(appointmentDto.getCity());
+        event.setStreet(appointmentDto.getStreet());
+        event.setHouseNumber(appointmentDto.getHouseNumber());
 
         String json = gson.toJson(event);
         rabbitTemplate.convertAndSend(exchange, "update-appointment", json);
-        return null;
+        return new ResponseEntity<>(appointment, HttpStatus.CREATED);
     }
 
 
