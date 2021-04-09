@@ -22,11 +22,11 @@ public class Appointment implements Serializable {
     private Date endTime;
     @Column(name = "description")
     private String description;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "appointment_type_id", referencedColumnName = "id")
     @JsonIgnore
     private AppointmentType appointmentType;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "reason_type_id", referencedColumnName = "id")
     @JsonIgnore
     private ReasonType reasonType;
@@ -67,7 +67,7 @@ public class Appointment implements Serializable {
         this.description = dto.getDescription();
         this.reason = dto.getReason();
         this.attention = dto.getAttention();
-        this.appointmentType = new AppointmentType(dto.getAppointmentTypeId(), dto.getAppointmentTypeName(), this);
-        this.reasonType = new ReasonType(dto.getReasonTypeId(), dto.getReasonTypeName(), this);
+        this.appointmentType = new AppointmentType(dto.getAppointmentTypeId(), dto.getAppointmentTypeName(), null);
+        this.reasonType = new ReasonType(dto.getReasonTypeId(), dto.getReasonTypeName(), null);
     }
 }

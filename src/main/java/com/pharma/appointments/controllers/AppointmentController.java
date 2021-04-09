@@ -103,8 +103,8 @@ public class AppointmentController {
         return ResponseEntity.ok(ls);
     }
 
-    @RequestMapping(value = "/create/{appointmentDto}", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<?> createAppointments(@PathVariable AppointmentDto appointmentDto) {
+    @RequestMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public ResponseEntity<?> createAppointments(@RequestBody AppointmentDto appointmentDto) {
         Appointment appointment;
         try {
             appointment = new Appointment(appointmentDto);
@@ -116,21 +116,21 @@ public class AppointmentController {
         if (appointment == null) {
             return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);
         }
-        CreateAppointmentEvent event = new CreateAppointmentEvent();
-        event.setId(appointment.getId());
-        event.setEmployeeId(appointment.getEmployeeId());
-        event.setPatientName(appointmentDto.getPatientName());
-        event.setPatientDateOfBirth(appointmentDto.getPatientDateOfBirth());
-        event.setPatientStringNameNumber(appointmentDto.getPatientStreetNameNumber());
-        event.setPatientPostalCode(appointmentDto.getPatientPostalCode());
-        event.setLocation(appointmentDto.getLocation());
-        String json = gson.toJson(event);
-        Message message = MessageBuilder
-                .withBody(json.getBytes())
-                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-                .build();
+        CreateAppointmentEvent event = new CreateAppointmentEvent(appointmentDto);
         rabbitTemplate.convertAndSend(exchange, "create-appointment", gson.toJson(event));
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
+        Appointment appointment;
+        try {
+            appointment = new Appointment(newAppointment);
+            return ResponseEntity.ok(appointmentService.addAppointment(appointment));
+        } catch (NullPointerException exception) {
+            System.out.println(exception);
+        }
+        return new ResponseEntity<>("Failed to update appointment", HttpStatus.BAD_REQUEST);
     }
 
     private Gson initiateGson() {
