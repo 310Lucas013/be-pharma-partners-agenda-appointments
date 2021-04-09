@@ -18,12 +18,12 @@ public class EventReceiver {
         return new Jackson2JsonMessageConverter();
     }
 
-    @RabbitListener(queues = "${rabbitmq.queue}")
-    public void receive(Message event) {
-        System.out.println("received the event!");
-        log.info("Received event in service Appointments: {}", event);
-        // Convert to object.
-        // Do with it whatever you please.
-    }
+//    @RabbitListener(queues = "${rabbitmq.queue}")
+//    public void receive(Message event) {
+//        System.out.println("received the event!");
+//        log.info("Received event in service Appointments: {}", event);
+//        // Convert to object.
+//        // Do with it whatever you please.
+//    }
 }
 

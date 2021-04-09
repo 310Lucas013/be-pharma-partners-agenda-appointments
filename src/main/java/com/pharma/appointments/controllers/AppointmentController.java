@@ -4,6 +4,7 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pharma.appointments.events.UpdateAppointmentEvent;
 import com.pharma.appointments.models.HibernateProxyTypeAdapter;
 import com.google.gson.GsonBuilder;
 import com.pharma.appointments.events.CreateAppointmentEvent;
@@ -54,32 +55,36 @@ public class AppointmentController {
         this.gson = gson;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> add(@RequestBody AppointmentDto appointmentDto) {
-        return ResponseEntity.ok(appointmentService.addAppointment(appointmentDto));
-    }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public void update(@RequestBody AppointmentDto appointmentDto) {
+    public ResponseEntity<?> update(@RequestBody AppointmentDto appointmentDto) {
+        Appointment appointment;
+
         try {
-          appointmentService.addAppointment(appointmentDto);
+            appointment = new Appointment(appointmentDto);
         }
         catch (Exception ignore){
+            return new ResponseEntity<>("Failed to update appointment", HttpStatus.BAD_REQUEST);
         }
 
-        CreateAppointmentEvent event = new CreateAppointmentEvent();
+        try {
+            appointment = appointmentService.addAppointment(appointment);
+        }
+        catch (Exception ignore){
+            return new ResponseEntity<>("Failed to update appointment", HttpStatus.BAD_REQUEST);
+        }
+
+        if(appointment == null){
+            return new ResponseEntity<>("Failed to update appointment", HttpStatus.BAD_REQUEST);
+        }
+
+        UpdateAppointmentEvent event = new UpdateAppointmentEvent();
         event.setId(appointmentDto.getId());
-        event.setEmployeeId(appointmentDto.getEmployeeId());
-        event.setPatientId(appointmentDto.getPatientId());
-        event.setLocationid(appointmentDto.getLoationId());
+        event.setZipCode(appointmentDto.getLocation());
 
         String json = gson.toJson(event);
-        Message message = MessageBuilder
-                .withBody(json.getBytes())
-                .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-                .build();
-
-        rabbitTemplate.convertAndSend(exchange, "update-appointment", message);
+        rabbitTemplate.convertAndSend(exchange, "update-appointment", json);
+        return null;
     }
 
 
@@ -126,11 +131,6 @@ public class AppointmentController {
                 .build();
         rabbitTemplate.convertAndSend(exchange, "create-appointment", gson.toJson(event));
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
-         return ResponseEntity.ok(appointmentService.addAppointment(newAppointment));
     }
 
     private Gson initiateGson() {
