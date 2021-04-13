@@ -57,8 +57,9 @@ public class AppointmentController {
 
     @GetMapping("/employee-id/{id}")
     public ResponseEntity<String> getAll(@PathVariable("id") long id) {
-        System.out.println(id);
+        System.out.println("id = " + id);
         List<Appointment> appointments = appointmentService.getAllAppointmentsByEmployeeId(id);
+        System.out.println("list size = " + appointments.size());
         Gson gson = initiateGson();
         String result = gson.toJson(appointments);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -126,5 +127,6 @@ public class AppointmentController {
 
     private static final List<String> EXCLUDE = new ArrayList<>() {{
         add("appointment");
+        add("appointments");
     }};
 }
