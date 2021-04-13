@@ -1,5 +1,7 @@
 package com.pharma.appointments.models.dto;
 
+import com.pharma.appointments.models.AppointmentType;
+import com.pharma.appointments.models.ReasonType;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,7 +11,6 @@ public class AppointmentDto {
     private Long id;
     private Date startTime;
     private Date endTime;
-    private String description;
     private String street;
     private String city;
     private String houseNumber;
@@ -20,11 +21,9 @@ public class AppointmentDto {
     private String color;
 
     //appointmentType
-    private Long appointmentTypeId;
-        private String appointmentTypeName;
+    private AppointmentType appointmentType;
     //reasonType
-    private Long reasonTypeId;
-    private String reasonTypeName;
+    private ReasonType reasonType;
 
     //patient
     private String patientName;

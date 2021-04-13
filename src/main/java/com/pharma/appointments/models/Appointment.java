@@ -20,8 +20,6 @@ public class Appointment implements Serializable {
     private Date startTime;
     @Column(name = "end_time")
     private Date endTime;
-    @Column(name = "description")
-    private String description;
     @ManyToOne
     @JoinColumn(name = "appointment_type_id", referencedColumnName = "id")
     @JsonIgnore
@@ -49,11 +47,10 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
-    public Appointment(long id, Date startTime, Date endTime, String description, AppointmentType appointmentType, ReasonType reasonType, String reason, String attention) {
+    public Appointment(long id, Date startTime, Date endTime, AppointmentType appointmentType, ReasonType reasonType, String reason, String attention) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.description = description;
         this.appointmentType = appointmentType;
         this.reasonType = reasonType;
         this.reason = reason;
@@ -64,10 +61,9 @@ public class Appointment implements Serializable {
         if(dto.getId() != null) this.id = dto.getId();
         this.startTime = dto.getStartTime();
         this.endTime = dto.getEndTime();
-        this.description = dto.getDescription();
         this.reason = dto.getReason();
         this.attention = dto.getAttention();
-        this.appointmentType = new AppointmentType(dto.getAppointmentTypeId(), dto.getAppointmentTypeName(), null);
-        this.reasonType = new ReasonType(dto.getReasonTypeId(), dto.getReasonTypeName(), null);
+        this.appointmentType = dto.getAppointmentType();
+        this.reasonType = dto.getReasonType();
     }
 }
