@@ -57,9 +57,7 @@ public class AppointmentController {
 
     @GetMapping("/employee-id/{id}")
     public ResponseEntity<String> getAll(@PathVariable("id") long id) {
-        System.out.println("id = " + id);
         List<Appointment> appointments = appointmentService.getAllAppointmentsByEmployeeId(id);
-        System.out.println("list size = " + appointments.size());
         Gson gson = initiateGson();
         String result = gson.toJson(appointments);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -69,6 +67,13 @@ public class AppointmentController {
     public ResponseEntity<?> getAllAppointments() {
         List<Appointment> ls = appointmentService.getAllAppointments();
         return ResponseEntity.ok(ls);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteAppointment(@PathVariable("id") long id) {
+        System.out.println("reached deleteAppointment");
+        appointmentService.deleteAppointment(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)

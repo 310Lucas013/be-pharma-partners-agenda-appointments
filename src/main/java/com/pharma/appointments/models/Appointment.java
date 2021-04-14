@@ -20,11 +20,11 @@ public class Appointment implements Serializable {
     private Date startTime;
     @Column(name = "end_time")
     private Date endTime;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "appointment_type_id", referencedColumnName = "id")
     @JsonIgnore
     private AppointmentType appointmentType;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "reason_type_id", referencedColumnName = "id")
     @JsonIgnore
     private ReasonType reasonType;
