@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Data
 public class AppointmentDto {
+    private Date date;
     private Date startTime;
     private Date endTime;
     private String street;
