@@ -95,8 +95,9 @@ public class AppointmentController {
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
+        System.out.println("internal screaming");
         Appointment appointment;
         try {
             appointment = new Appointment(newAppointment);

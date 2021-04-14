@@ -16,15 +16,17 @@ public class Appointment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+    @Column(name = "date")
+    private Date date;
     @Column(name = "start_time")
     private Date startTime;
     @Column(name = "end_time")
     private Date endTime;
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "appointment_type_id", referencedColumnName = "id")
     @JsonIgnore
     private AppointmentType appointmentType;
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "reason_type_id", referencedColumnName = "id")
     @JsonIgnore
     private ReasonType reasonType;
@@ -47,8 +49,9 @@ public class Appointment implements Serializable {
     public Appointment() {
     }
 
-    public Appointment(long id, Date startTime, Date endTime, AppointmentType appointmentType, ReasonType reasonType, String reason, String attention) {
+    public Appointment(long id, Date startTime, Date endTime, AppointmentType appointmentType, ReasonType reasonType, String reason, String attention, Date date) {
         this.id = id;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.appointmentType = appointmentType;
@@ -58,6 +61,7 @@ public class Appointment implements Serializable {
     }
 
     public Appointment(AppointmentDto dto) {
+        this.date = dto.getDate();
         this.startTime = dto.getStartTime();
         this.endTime = dto.getEndTime();
         this.reason = dto.getReason();
