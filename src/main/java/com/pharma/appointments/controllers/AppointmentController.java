@@ -79,6 +79,7 @@ public class AppointmentController {
     @RequestMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     public ResponseEntity<?> createAppointments(@RequestBody AppointmentDto appointmentDto) {
         Appointment appointment;
+        System.out.println(appointmentDto);
         try {
             appointment = new Appointment(appointmentDto);
             appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
@@ -97,7 +98,6 @@ public class AppointmentController {
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
-        System.out.println("internal screaming");
         Appointment appointment;
         try {
             appointment = new Appointment(newAppointment);
