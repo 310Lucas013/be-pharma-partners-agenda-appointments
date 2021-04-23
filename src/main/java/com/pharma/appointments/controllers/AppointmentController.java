@@ -76,8 +76,8 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-    public ResponseEntity<?> createAppointments(@RequestBody AppointmentDto appointmentDto) {
+    @PostMapping(value = "/create", produces = "application/json")
+    public ResponseEntity<?> createAppointments(AppointmentDto appointmentDto) {
         Appointment appointment;
         System.out.println(appointmentDto);
         try {
@@ -97,7 +97,7 @@ public class AppointmentController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<?> changeAppointment(@RequestBody AppointmentDto newAppointment) {
+    public ResponseEntity<?> changeAppointment(AppointmentDto newAppointment) {
         Appointment appointment;
         try {
             appointment = new Appointment(newAppointment);
