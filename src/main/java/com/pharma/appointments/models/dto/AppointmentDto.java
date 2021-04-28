@@ -13,10 +13,12 @@ public class AppointmentDto {
     private String city;
     private String houseNumber;
     private String country;
-    private String postalCode;
+    private String zipCode;
     private String reason;
     private String attention;
     private String color;
+    private boolean priority;
+    private boolean mgn;
 
     //appointmentType
     private AppointmentType appointmentType;
@@ -34,6 +36,31 @@ public class AppointmentDto {
     private Long locationId;
 
     public AppointmentDto() {
+    }
+
+    public AppointmentDto(Date date, Date startTime, Date endTime, String street, String city, String houseNumber, String country, String zipCode, String reason, String attention, String color, boolean priority, boolean mgn, AppointmentType appointmentType, ReasonType reasonType, String patientName, String patientStreetNameNumber, String patientDateOfBirth, String patientPostalCode, Long employeeId, Long patientId, Long locationId) {
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.street = street;
+        this.city = city;
+        this.houseNumber = houseNumber;
+        this.country = country;
+        this.zipCode = zipCode;
+        this.reason = reason;
+        this.attention = attention;
+        this.color = color;
+        this.priority = priority;
+        this.mgn = mgn;
+        this.appointmentType = appointmentType;
+        this.reasonType = reasonType;
+        this.patientName = patientName;
+        this.patientStreetNameNumber = patientStreetNameNumber;
+        this.patientDateOfBirth = patientDateOfBirth;
+        this.patientPostalCode = patientPostalCode;
+        this.employeeId = employeeId;
+        this.patientId = patientId;
+        this.locationId = locationId;
     }
 
     public Date getDate() {
@@ -92,12 +119,12 @@ public class AppointmentDto {
         this.country = country;
     }
 
-    public String getPostalCode() {
-        return postalCode;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public String getReason() {
@@ -194,5 +221,49 @@ public class AppointmentDto {
 
     public void setLocationId(Long locationId) {
         this.locationId = locationId;
+    }
+
+    public boolean isPriority() {
+        return priority;
+    }
+
+    public void setPriority(boolean priority) {
+        this.priority = priority;
+    }
+
+    public boolean isMgn() {
+        return mgn;
+    }
+
+    public void setMgn(boolean mgn) {
+        this.mgn = mgn;
+    }
+
+    @Override
+    public String toString() {
+        return "AppointmentDto{" +
+                "date=" + date +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", country='" + country + '\'' +
+                ", postalCode='" + zipCode + '\'' +
+                ", reason='" + reason + '\'' +
+                ", attention='" + attention + '\'' +
+                ", color='" + color + '\'' +
+                ", priority=" + priority +
+                ", mgn=" + mgn +
+                ", appointmentType=" + appointmentType +
+                ", reasonType=" + reasonType +
+                ", patientName='" + patientName + '\'' +
+                ", patientStreetNameNumber='" + patientStreetNameNumber + '\'' +
+                ", patientDateOfBirth='" + patientDateOfBirth + '\'' +
+                ", patientPostalCode='" + patientPostalCode + '\'' +
+                ", employeeId=" + employeeId +
+                ", patientId=" + patientId +
+                ", locationId=" + locationId +
+                '}';
     }
 }

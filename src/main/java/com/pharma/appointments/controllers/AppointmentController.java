@@ -78,8 +78,8 @@ public class AppointmentController {
 
     @PostMapping(value = "/create", produces = "application/json")
     public ResponseEntity<?> createAppointments(AppointmentDto appointmentDto) {
+        System.out.println(appointmentDto.toString());
         Appointment appointment;
-        System.out.println(appointmentDto);
         try {
             appointment = new Appointment(appointmentDto);
             appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
