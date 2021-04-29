@@ -86,6 +86,7 @@ public class AppointmentController {
             return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);
         }
         appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
+        System.out.println(appointment.toString());
         appointment = appointmentService.addAppointment(appointment);
         if (appointment == null) {
             return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);

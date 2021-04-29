@@ -20,6 +20,20 @@ public class Appointment implements Serializable {
     private Date startTime;
     @Column(name = "end_time")
     private Date endTime;
+    @Column(name = "reason")
+    private String reason;
+    @Column(name = "attention")
+    private String attention;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "appointment_status")
+    private AppointmentStatus appointmentStatus;
+    @Column(name = "color")
+    private String color;
+    @Column(name = "priority")
+    private boolean priority;
+    @Column(name = "mgn")
+    private boolean mgn;
+
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "appointment_type_id", referencedColumnName = "id")
     @JsonIgnore
@@ -28,15 +42,7 @@ public class Appointment implements Serializable {
     @JoinColumn(name = "reason_type_id", referencedColumnName = "id")
     @JsonIgnore
     private ReasonType reasonType;
-    @Column(name = "reason")
-    private String reason;
-    @Column(name = "attention")
-    private String attention;
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "appointment_status")
-    private AppointmentStatus appointmentStatus;
-    @Column(name = "priority")
-    private boolean priority;
+
     @Column(name = "employee_id")
     private long employeeId;
     @Column(name = "patient_id")
@@ -44,18 +50,27 @@ public class Appointment implements Serializable {
     @Column(name = "location_id")
     private long locationId;
 
+
+
     public Appointment() {
     }
 
-    public Appointment(long id, Date startTime, Date endTime, AppointmentType appointmentType, ReasonType reasonType, String reason, String attention, Date date) {
+    public Appointment(long id, Date date, Date startTime, Date endTime, String reason, String attention, AppointmentStatus appointmentStatus, String color, boolean priority, boolean mgn, AppointmentType appointmentType, ReasonType reasonType, long employeeId, long patientId, long locationId) {
         this.id = id;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.appointmentType = appointmentType;
-        this.reasonType = reasonType;
         this.reason = reason;
         this.attention = attention;
+        this.appointmentStatus = appointmentStatus;
+        this.color = color;
+        this.priority = priority;
+        this.mgn = mgn;
+        this.appointmentType = appointmentType;
+        this.reasonType = reasonType;
+        this.employeeId = employeeId;
+        this.patientId = patientId;
+        this.locationId = locationId;
     }
 
     public Appointment(AppointmentDto dto) {
@@ -64,8 +79,14 @@ public class Appointment implements Serializable {
         this.endTime = dto.getEndTime();
         this.reason = dto.getReason();
         this.attention = dto.getAttention();
+        this.color = dto.getColor();
+        this.priority = dto.isPriority();
+        this.mgn = dto.isMgn();
         this.appointmentType = dto.getAppointmentType();
         this.reasonType = dto.getReasonType();
+        this.employeeId = dto.getEmployeeId();
+        this.patientId = dto.getPatientId();
+        this.locationId = dto.getLocationId();
     }
 
     public long getId() {
@@ -170,5 +191,42 @@ public class Appointment implements Serializable {
 
     public void setLocationId(long locationId) {
         this.locationId = locationId;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public boolean isMgn() {
+        return mgn;
+    }
+
+    public void setMgn(boolean mgn) {
+        this.mgn = mgn;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "id=" + id +
+                ", date=" + date +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", reason='" + reason + '\'' +
+                ", attention='" + attention + '\'' +
+                ", appointmentStatus=" + appointmentStatus +
+                ", color='" + color + '\'' +
+                ", priority=" + priority +
+                ", mgn=" + mgn +
+                ", appointmentType=" + appointmentType +
+                ", reasonType=" + reasonType +
+                ", employeeId=" + employeeId +
+                ", patientId=" + patientId +
+                ", locationId=" + locationId +
+                '}';
     }
 }

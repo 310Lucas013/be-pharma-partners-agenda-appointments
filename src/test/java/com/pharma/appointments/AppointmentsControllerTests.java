@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pharma.appointments.controllers.AppointmentController;
 import com.pharma.appointments.models.Appointment;
+import com.pharma.appointments.models.AppointmentStatus;
 import com.pharma.appointments.models.AppointmentType;
 import com.pharma.appointments.models.ReasonType;
 import com.pharma.appointments.repositories.AppointmentRepository;
@@ -86,8 +87,8 @@ class AppointmentsControllerTests {
     @Test
     public void getAllAppointmentByEmployeeIdAPI()
             throws Exception {
-        Appointment appointment1 = new Appointment(1, new Date(), new Date(), new AppointmentType(), new ReasonType(), "reason", "attention", new Date());
-        Appointment appointment2 = new Appointment(2, new Date(), new Date(), new AppointmentType(), new ReasonType(), "reason", "attention", new Date());
+        Appointment appointment1 = new Appointment(1, new Date(), new Date(), new Date(), "reason", "attention", AppointmentStatus.ABSENT, "color", false, false, new AppointmentType(), new ReasonType(), 0,0,0);
+        Appointment appointment2 = new Appointment(2, new Date(), new Date(), new Date(), "reason", "attention", AppointmentStatus.ABSENT, "color", false, false, new AppointmentType(), new ReasonType(), 0,0,0);
         List<Appointment> allAppointments = new ArrayList<>();
         allAppointments.add(appointment1);
         allAppointments.add(appointment2);
@@ -101,19 +102,6 @@ class AppointmentsControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].id").exists());
-    }
-
-    @Test
-    public void updateAppointmentAPI()
-            throws Exception {
-        Appointment appointment = new Appointment(1, new Date(), new Date(), new AppointmentType(), new ReasonType(), "reason", "attention", new Date());
-        given(appointmentService.addAppointment(any(Appointment.class))).willReturn(appointment);
-        mvc.perform(MockMvcRequestBuilders
-                .put("/appointments/update", gson.toJson(appointment))
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
     }
 
     @Test
