@@ -20,11 +20,7 @@ public class AppointmentService {
     }
 
     public List<Appointment> getAllAppointmentsByEmployeeId(long id) {
-        System.out.println(id);
-        List<Appointment> appointments = appointmentRepository.findAllByEmployeeId(id);
-        System.out.println("something");
-        // System.out.println(appointments);
-        return appointments;
+        return appointmentRepository.findAllByEmployeeId(id);
     }
 
     public List<Appointment> getAllAppointments() {
@@ -32,7 +28,7 @@ public class AppointmentService {
     }
 
     public void deleteAppointment(long id) {
-        System.out.println("deleting " + id);
+        System.out.println("deleting: " + id);
         appointmentRepository.deleteById(id);
     }
 }

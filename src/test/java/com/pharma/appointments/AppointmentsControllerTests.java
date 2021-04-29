@@ -37,105 +37,93 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes=AppointmentsApplication.class)
+@ContextConfiguration(classes = AppointmentsApplication.class)
 @WebMvcTest(AppointmentController.class)
 class AppointmentsControllerTests {
 
-	@Autowired
-	private MockMvc mvc;
+    @Autowired
+    private MockMvc mvc;
 
-	@MockBean
-	private AppointmentTypeService appointmentTypeService;
-	@MockBean
-	private ReasonTypeService reasonTypeService;
-	@MockBean
-	private AmqpTemplate rabbitTemplate;
-	@MockBean
-	private AppointmentRepository appointmentRepository;
-	@MockBean
-	private AppointmentService appointmentService;
+    @MockBean
+    private AppointmentTypeService appointmentTypeService;
+    @MockBean
+    private ReasonTypeService reasonTypeService;
+    @MockBean
+    private AmqpTemplate rabbitTemplate;
+    @MockBean
+    private AppointmentRepository appointmentRepository;
+    @MockBean
+    private AppointmentService appointmentService;
 
-	private final Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
-	@Before
-	public void setUp() {
-		MockitoAnnotations.openMocks(this);
-	}
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-	@Test
-	public void contextLoads() {
-		assertThat(appointmentService).isNotNull();
-	}
+    @Test
+    public void contextLoads() {
+        assertThat(appointmentService).isNotNull();
+    }
 
-	@Test
-	public void getAllAppointmentsAPI()
-			throws Exception {
-		Appointment appointment1 = new Appointment();
-		List<Appointment> allAppointments = new ArrayList<>();
-		allAppointments.add(appointment1);
+    @Test
+    public void getAllAppointmentsAPI()
+            throws Exception {
+        Appointment appointment1 = new Appointment();
+        List<Appointment> allAppointments = new ArrayList<>();
+        allAppointments.add(appointment1);
 
-		given(appointmentService.getAllAppointments()).willReturn(allAppointments);
-		mvc.perform(MockMvcRequestBuilders
-				.get("/appointments/getall")
-				.accept(MediaType.APPLICATION_JSON))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$[*].id").isNotEmpty());
-	}
+        given(appointmentService.getAllAppointments()).willReturn(allAppointments);
+        mvc.perform(MockMvcRequestBuilders
+                .get("/appointments/getall")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].id").isNotEmpty());
+    }
 
-	@Test
-	public void addAppointmentAPI()
-			throws Exception {
-		Appointment appointment = new Appointment(1, new Date(), new Date(), new AppointmentType(),new ReasonType(), "reason", "attention", new Date());
-		given(appointmentService.addAppointment(any(Appointment.class))).willReturn(appointment);
-		mvc.perform(MockMvcRequestBuilders
-				.post("/appointments/create", appointment)
-				.accept(MediaType.APPLICATION_JSON))
-				.andDo(print())
-				.andExpect(status().isCreated())
-				.andExpect(MockMvcResultMatchers.jsonPath("$").exists());
-	}
+    @Test
+    public void getAllAppointmentByEmployeeIdAPI()
+            throws Exception {
+        Appointment appointment1 = new Appointment(1, new Date(), new Date(), new AppointmentType(), new ReasonType(), "reason", "attention", new Date());
+        Appointment appointment2 = new Appointment(2, new Date(), new Date(), new AppointmentType(), new ReasonType(), "reason", "attention", new Date());
+        List<Appointment> allAppointments = new ArrayList<>();
+        allAppointments.add(appointment1);
+        allAppointments.add(appointment2);
+        String json = gson.toJson(allAppointments);
+        allAppointments = gson.fromJson(json, new TypeToken<List<Appointment>>() {
+        }.getType());
+        given(appointmentService.getAllAppointmentsByEmployeeId(1)).willReturn(allAppointments);
+        mvc.perform(MockMvcRequestBuilders
+                .get("/appointments/employee-id/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].id").exists());
+    }
 
-	@Test
-	public void getAllAppointmentByEmployeeIdAPI()
-			throws Exception {
-		Appointment appointment1 = new Appointment(1, new Date(), new Date(), new AppointmentType(),new ReasonType(), "reason", "attention", new Date());
-		Appointment appointment2 = new Appointment(2, new Date(), new Date(), new AppointmentType(),new ReasonType(), "reason", "attention", new Date());
-		List<Appointment> allAppointments = new ArrayList<>();
-		allAppointments.add(appointment1);
-		allAppointments.add(appointment2);
-		String json = gson.toJson(allAppointments);
-		allAppointments = gson.fromJson(json, new TypeToken<List<Appointment>>(){}.getType());
-		given(appointmentService.getAllAppointmentsByEmployeeId(1)).willReturn(allAppointments);
-		mvc.perform(MockMvcRequestBuilders
-				.get("/appointments/employee-id/1")
-				.accept(MediaType.APPLICATION_JSON))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$[*].id").exists());
-	}
+    @Test
+    public void updateAppointmentAPI()
+            throws Exception {
+        Appointment appointment = new Appointment(1, new Date(), new Date(), new AppointmentType(), new ReasonType(), "reason", "attention", new Date());
+        given(appointmentService.addAppointment(any(Appointment.class))).willReturn(appointment);
+        mvc.perform(MockMvcRequestBuilders
+                .put("/appointments/update", gson.toJson(appointment))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").exists());
+    }
 
-	@Test
-	public void updateAppointmentAPI()
-			throws Exception {
-		Appointment appointment = new Appointment(1, new Date(), new Date(), new AppointmentType(),new ReasonType(), "reason", "attention", new Date());
-		given(appointmentService.addAppointment(any(Appointment.class))).willReturn(appointment);
-		mvc.perform(MockMvcRequestBuilders
-				.put("/appointments/update", gson.toJson(appointment))
-				.accept(MediaType.APPLICATION_JSON))
-				.andDo(print())
-				.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.jsonPath("$").exists());
-	}
-
-	@Test
-	public void deleteAppointmentAPI()
-			throws Exception {
-		mvc.perform(MockMvcRequestBuilders
-				.delete("/appointments/1")
-				.accept(MediaType.APPLICATION_JSON))
-				.andDo(print())
-				.andExpect(status().isOk());
-	}
+    @Test
+    public void deleteAppointmentAPI()
+            throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                .delete("/appointments/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
 }

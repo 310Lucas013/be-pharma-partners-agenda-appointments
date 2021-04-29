@@ -76,17 +76,16 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/create", produces = "application/json")
-    public ResponseEntity<?> createAppointments(AppointmentDto appointmentDto) {
-        System.out.println(appointmentDto.toString());
+    @PostMapping(value = "/create", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> createAppointments(@RequestBody AppointmentDto appointmentDto) {
         Appointment appointment;
         try {
             appointment = new Appointment(appointmentDto);
-            appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
         } catch (NullPointerException exception) {
             System.out.println(exception);
             return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);
         }
+        appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
         appointment = appointmentService.addAppointment(appointment);
         if (appointment == null) {
             return new ResponseEntity<>("Failed to create appointment", HttpStatus.BAD_REQUEST);

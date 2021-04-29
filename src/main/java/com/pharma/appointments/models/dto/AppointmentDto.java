@@ -239,31 +239,5 @@ public class AppointmentDto {
         this.mgn = mgn;
     }
 
-    @Override
-    public String toString() {
-        return "AppointmentDto{" +
-                "date=" + date +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", street='" + street + '\'' +
-                ", city='" + city + '\'' +
-                ", houseNumber='" + houseNumber + '\'' +
-                ", country='" + country + '\'' +
-                ", postalCode='" + zipCode + '\'' +
-                ", reason='" + reason + '\'' +
-                ", attention='" + attention + '\'' +
-                ", color='" + color + '\'' +
-                ", priority=" + priority +
-                ", mgn=" + mgn +
-                ", appointmentType=" + appointmentType +
-                ", reasonType=" + reasonType +
-                ", patientName='" + patientName + '\'' +
-                ", patientStreetNameNumber='" + patientStreetNameNumber + '\'' +
-                ", patientDateOfBirth='" + patientDateOfBirth + '\'' +
-                ", patientPostalCode='" + patientPostalCode + '\'' +
-                ", employeeId=" + employeeId +
-                ", patientId=" + patientId +
-                ", locationId=" + locationId +
-                '}';
-    }
+
 }
