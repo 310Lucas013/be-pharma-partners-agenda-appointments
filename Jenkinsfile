@@ -11,7 +11,7 @@ pipeline {
       }
       stage('SonarQube analysis') {
         steps {
-            bat 'mvn clean package sonar:sonar -Dsonar.login=27ab6dc53812c5be56c778401a32443bc0614c11'
+            bat 'mvn clean package sonar:sonar -Dsonar.login=55320663377d02ee326abd806b1898a0554d5a93'
         }
       }
       stage('Deployment') {
