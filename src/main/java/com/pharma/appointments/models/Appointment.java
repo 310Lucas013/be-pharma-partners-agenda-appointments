@@ -27,8 +27,10 @@ public class Appointment implements Serializable {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "appointment_status")
     private AppointmentStatus appointmentStatus;
-    @Column(name = "color")
-    private String color;
+    @Column(name = "colorPrimary")
+    private String colorPrimary;
+    @Column(name = "colorSecondary")
+    private String colorSecondary;
     @Column(name = "priority")
     private boolean priority;
     @Column(name = "mgn")
@@ -51,11 +53,10 @@ public class Appointment implements Serializable {
     private long locationId;
 
 
-
     public Appointment() {
     }
 
-    public Appointment(long id, Date date, Date startTime, Date endTime, String reason, String attention, AppointmentStatus appointmentStatus, String color, boolean priority, boolean mgn, AppointmentType appointmentType, ReasonType reasonType, long employeeId, long patientId, long locationId) {
+    public Appointment(long id, Date date, Date startTime, Date endTime, String reason, String attention, AppointmentStatus appointmentStatus, String colorPrimary, String colorSecondary, boolean priority, boolean mgn, AppointmentType appointmentType, ReasonType reasonType, long employeeId, long patientId, long locationId) {
         this.id = id;
         this.date = date;
         this.startTime = startTime;
@@ -63,7 +64,8 @@ public class Appointment implements Serializable {
         this.reason = reason;
         this.attention = attention;
         this.appointmentStatus = appointmentStatus;
-        this.color = color;
+        this.colorPrimary = colorPrimary;
+        this.colorSecondary = colorSecondary;
         this.priority = priority;
         this.mgn = mgn;
         this.appointmentType = appointmentType;
@@ -79,7 +81,8 @@ public class Appointment implements Serializable {
         this.endTime = dto.getEndTime();
         this.reason = dto.getReason();
         this.attention = dto.getAttention();
-        this.color = dto.getColor();
+        this.colorSecondary = dto.getColorSecondary();
+        this.colorPrimary = dto.getColorPrimary();
         this.priority = dto.isPriority();
         this.mgn = dto.isMgn();
         this.appointmentType = dto.getAppointmentType();
@@ -193,13 +196,6 @@ public class Appointment implements Serializable {
         this.locationId = locationId;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public boolean isMgn() {
         return mgn;
@@ -207,6 +203,22 @@ public class Appointment implements Serializable {
 
     public void setMgn(boolean mgn) {
         this.mgn = mgn;
+    }
+
+    public String getColorPrimary() {
+        return colorPrimary;
+    }
+
+    public void setColorPrimary(String colorPrimary) {
+        this.colorPrimary = colorPrimary;
+    }
+
+    public String getColorSecondary() {
+        return colorSecondary;
+    }
+
+    public void setColorSecondary(String colorSecondary) {
+        this.colorSecondary = colorSecondary;
     }
 
     @Override
@@ -219,7 +231,8 @@ public class Appointment implements Serializable {
                 ", reason='" + reason + '\'' +
                 ", attention='" + attention + '\'' +
                 ", appointmentStatus=" + appointmentStatus +
-                ", color='" + color + '\'' +
+                ", colorPrimary='" + colorPrimary + '\'' +
+                ", colorSecondary='" + colorSecondary + '\'' +
                 ", priority=" + priority +
                 ", mgn=" + mgn +
                 ", appointmentType=" + appointmentType +

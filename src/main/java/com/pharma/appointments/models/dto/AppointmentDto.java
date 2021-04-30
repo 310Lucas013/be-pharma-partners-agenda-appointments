@@ -16,7 +16,8 @@ public class AppointmentDto {
     private String zipCode;
     private String reason;
     private String attention;
-    private String color;
+    private String colorPrimary;
+    private String colorSecondary;
     private boolean priority;
     private boolean mgn;
 
@@ -38,7 +39,7 @@ public class AppointmentDto {
     public AppointmentDto() {
     }
 
-    public AppointmentDto(Date date, Date startTime, Date endTime, String street, String city, String houseNumber, String country, String zipCode, String reason, String attention, String color, boolean priority, boolean mgn, AppointmentType appointmentType, ReasonType reasonType, String patientName, String patientStreetNameNumber, String patientDateOfBirth, String patientPostalCode, Long employeeId, Long patientId, Long locationId) {
+    public AppointmentDto(Date date, Date startTime, Date endTime, String street, String city, String houseNumber, String country, String zipCode, String reason, String attention, String colorPrimary, String colorSecondary, boolean priority, boolean mgn, AppointmentType appointmentType, ReasonType reasonType, String patientName, String patientStreetNameNumber, String patientDateOfBirth, String patientPostalCode, Long employeeId, Long patientId, Long locationId) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -49,7 +50,8 @@ public class AppointmentDto {
         this.zipCode = zipCode;
         this.reason = reason;
         this.attention = attention;
-        this.color = color;
+        this.colorPrimary = colorPrimary;
+        this.colorSecondary = colorSecondary;
         this.priority = priority;
         this.mgn = mgn;
         this.appointmentType = appointmentType;
@@ -143,13 +145,6 @@ public class AppointmentDto {
         this.attention = attention;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public AppointmentType getAppointmentType() {
         return appointmentType;
@@ -240,4 +235,19 @@ public class AppointmentDto {
     }
 
 
+    public String getColorPrimary() {
+        return colorPrimary;
+    }
+
+    public void setColorPrimary(String colorPrimary) {
+        this.colorPrimary = colorPrimary;
+    }
+
+    public String getColorSecondary() {
+        return colorSecondary;
+    }
+
+    public void setColorSecondary(String colorSecondary) {
+        this.colorSecondary = colorSecondary;
+    }
 }

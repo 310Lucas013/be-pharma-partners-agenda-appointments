@@ -87,8 +87,8 @@ class AppointmentsControllerTests {
     @Test
     public void getAllAppointmentByEmployeeIdAPI()
             throws Exception {
-        Appointment appointment1 = new Appointment(1, new Date(), new Date(), new Date(), "reason", "attention", AppointmentStatus.ABSENT, "color", false, false, new AppointmentType(), new ReasonType(), 0,0,0);
-        Appointment appointment2 = new Appointment(2, new Date(), new Date(), new Date(), "reason", "attention", AppointmentStatus.ABSENT, "color", false, false, new AppointmentType(), new ReasonType(), 0,0,0);
+        Appointment appointment1 = new Appointment(1, new Date(), new Date(), new Date(), "reason", "attention", AppointmentStatus.ABSENT, "color","color", false, false, new AppointmentType(), new ReasonType(), 0,0,0);
+        Appointment appointment2 = new Appointment(2, new Date(), new Date(), new Date(), "reason", "attention", AppointmentStatus.ABSENT, "color","color", false, false, new AppointmentType(), new ReasonType(), 0,0,0);
         List<Appointment> allAppointments = new ArrayList<>();
         allAppointments.add(appointment1);
         allAppointments.add(appointment2);
