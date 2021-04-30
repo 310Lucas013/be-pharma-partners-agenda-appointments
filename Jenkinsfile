@@ -6,7 +6,7 @@ pipeline {
   stages {
       stage('run test') {
         steps {
-            bat 'mvn test'
+            bat 'mvn clean test'
         }
       }
       stage('SonarQube analysis') {
