@@ -6,6 +6,7 @@ import com.pharma.appointments.repositories.AppointmentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppointmentService {
@@ -30,5 +31,13 @@ public class AppointmentService {
     public void deleteAppointment(long id) {
         System.out.println("deleting: " + id);
         appointmentRepository.deleteById(id);
+    }
+
+    public Optional<Appointment> getById(long id){
+        return appointmentRepository.findById(id);
+    }
+
+    public Appointment save(Appointment appointment){
+        return appointmentRepository.save(appointment);
     }
 }

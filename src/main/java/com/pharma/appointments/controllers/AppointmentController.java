@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/appointments")
@@ -52,15 +53,41 @@ public class AppointmentController {
         this.appointmentTypeService = appointmentTypeService;
         this.reasonTypeService = reasonTypeService;
         this.rabbitTemplate = rabbitTemplate;
-        this.gson = gson;
+        this.gson = initiateGson();
     }
 
     @GetMapping("/employee-id/{id}")
     public ResponseEntity<String> getAll(@PathVariable("id") long id) {
         List<Appointment> appointments = appointmentService.getAllAppointmentsByEmployeeId(id);
-        Gson gson = initiateGson();
         String result = gson.toJson(appointments);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/register/{id}")
+    public ResponseEntity<?> register(@PathVariable("id") long appointmentId) {
+        Optional<Appointment> optionalAppointment = appointmentService.getById(appointmentId);
+        if(optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
+        Appointment appointment = optionalAppointment.get();
+        appointment.setAppointmentStatus(AppointmentStatus.REGISTERED);
+        return new ResponseEntity<>(gson.toJson(appointmentService.save(appointment)), HttpStatus.OK);
+    }
+
+    @GetMapping("/absent/{id}")
+    public ResponseEntity<?> absent(@PathVariable("id") long appointmentId) {
+        Optional<Appointment> optionalAppointment = appointmentService.getById(appointmentId);
+        if(optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
+        Appointment appointment = optionalAppointment.get();
+        appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
+        return new ResponseEntity<>(gson.toJson(appointmentService.save(appointment)), HttpStatus.OK);
+    }
+
+    @GetMapping("/done/{id}")
+    public ResponseEntity<?> done(@PathVariable("id") long appointmentId) {
+        Optional<Appointment> optionalAppointment = appointmentService.getById(appointmentId);
+        if(optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
+        Appointment appointment = optionalAppointment.get();
+        appointment.setAppointmentStatus(AppointmentStatus.DONE);
+        return new ResponseEntity<>(gson.toJson(appointmentService.save(appointment)), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getall", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
