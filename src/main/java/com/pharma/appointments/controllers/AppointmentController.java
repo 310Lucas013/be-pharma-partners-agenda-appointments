@@ -63,7 +63,7 @@ public class AppointmentController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/register/{id}")
+    @GetMapping("/registered/{id}")
     public ResponseEntity<?> register(@PathVariable("id") long appointmentId) {
         Optional<Appointment> optionalAppointment = appointmentService.getById(appointmentId);
         if(optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
