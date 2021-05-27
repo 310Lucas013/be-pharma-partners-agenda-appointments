@@ -40,4 +40,8 @@ public class AppointmentService {
     public Appointment save(Appointment appointment){
         return appointmentRepository.save(appointment);
     }
+
+    public boolean existsById(long id){
+        return appointmentRepository.existsById(id);
+    }
 }

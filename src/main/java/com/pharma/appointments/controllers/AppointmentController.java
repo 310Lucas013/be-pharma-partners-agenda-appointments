@@ -66,7 +66,7 @@ public class AppointmentController {
     @GetMapping("/registered/{id}")
     public ResponseEntity<?> register(@PathVariable("id") long appointmentId) {
         Optional<Appointment> optionalAppointment = appointmentService.getById(appointmentId);
-        if(optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
+        if (optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
         Appointment appointment = optionalAppointment.get();
         appointment.setAppointmentStatus(AppointmentStatus.REGISTERED);
         return new ResponseEntity<>(gson.toJson(appointmentService.save(appointment)), HttpStatus.OK);
@@ -75,7 +75,7 @@ public class AppointmentController {
     @GetMapping("/absent/{id}")
     public ResponseEntity<?> absent(@PathVariable("id") long appointmentId) {
         Optional<Appointment> optionalAppointment = appointmentService.getById(appointmentId);
-        if(optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
+        if (optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
         Appointment appointment = optionalAppointment.get();
         appointment.setAppointmentStatus(AppointmentStatus.ABSENT);
         return new ResponseEntity<>(gson.toJson(appointmentService.save(appointment)), HttpStatus.OK);
@@ -84,7 +84,7 @@ public class AppointmentController {
     @GetMapping("/done/{id}")
     public ResponseEntity<?> done(@PathVariable("id") long appointmentId) {
         Optional<Appointment> optionalAppointment = appointmentService.getById(appointmentId);
-        if(optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
+        if (optionalAppointment.isEmpty()) return new ResponseEntity<>(new Appointment(), HttpStatus.BAD_REQUEST);
         Appointment appointment = optionalAppointment.get();
         appointment.setAppointmentStatus(AppointmentStatus.DONE);
         return new ResponseEntity<>(gson.toJson(appointmentService.save(appointment)), HttpStatus.OK);
@@ -124,13 +124,10 @@ public class AppointmentController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<?> changeAppointment(AppointmentDto newAppointment) {
-        Appointment appointment;
-        try {
-            appointment = new Appointment(newAppointment);
-            return ResponseEntity.ok(appointmentService.addAppointment(appointment));
-        } catch (NullPointerException exception) {
-            System.out.println(exception);
+    public ResponseEntity<?> changeAppointment(@RequestBody Appointment appointment) {
+        System.out.println(appointment.toString());
+        if (appointmentService.existsById(appointment.getId())) {
+            return new ResponseEntity<>(appointmentService.addAppointment(appointment), HttpStatus.OK);
         }
         return new ResponseEntity<>("Failed to update appointment", HttpStatus.BAD_REQUEST);
     }

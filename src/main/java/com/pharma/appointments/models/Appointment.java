@@ -38,11 +38,9 @@ public class Appointment implements Serializable {
 
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "appointment_type_id", referencedColumnName = "id")
-    @JsonIgnore
     private AppointmentType appointmentType;
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "reason_type_id", referencedColumnName = "id")
-    @JsonIgnore
     private ReasonType reasonType;
 
     @Column(name = "employee_id")
