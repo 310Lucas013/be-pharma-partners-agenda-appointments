@@ -1,6 +1,5 @@
 package com.pharma.appointments.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pharma.appointments.models.dto.AppointmentDto;
 
 import javax.persistence.*;
